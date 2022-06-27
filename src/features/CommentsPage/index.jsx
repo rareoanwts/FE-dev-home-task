@@ -7,9 +7,9 @@ import { useQuery } from '@apollo/client';
 import { getIssueComments } from './query';
 import Header from './Header';
 import Comment from './Comment';
+import Context from './Context';
 
 const Comments = ({ id, closed, title, number, createdAt, author, comments }) => {
-
   return (
     <>
       <Header
@@ -51,14 +51,16 @@ Comments.propTypes = {
 
 const CommentsHOC = () => {
   const { userId, repo, issueNumber } = useParams();
-  const { data } = useQuery(getIssueComments({ userId, repoName: repo, issueNumber }));
+  const { data, refetch } = useQuery(getIssueComments({ userId, repoName: repo, issueNumber }));
 
   return data ? (
-    <Grid container justifyContent="center">
-      <Grid xs={8} item>
-        <Comments {...data.repository.issue} />
+    <Context.Provider value={{ refetch }}>
+      <Grid container justifyContent="center">
+        <Grid xs={8} item>
+          <Comments {...data.repository.issue} />
+        </Grid>
       </Grid>
-    </Grid>
+    </Context.Provider>
   ) : (
     <></>
   );

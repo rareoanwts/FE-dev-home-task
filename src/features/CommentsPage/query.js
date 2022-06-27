@@ -69,8 +69,8 @@ query {
 `;
 
 const ADD_COMMENT = gql`
-mutation AddComment($clientMutationId: String, $subjectId: ID!, $body: String!){
-    addComment(input:{clientMutationId: $clientMutationId, subjectId: $subjectId, body: $body}) {
+  mutation AddComment($clientMutationId: String, $subjectId: ID!, $body: String!) {
+    addComment(input: { clientMutationId: $clientMutationId, subjectId: $subjectId, body: $body }) {
       clientMutationId
       commentEdge {
         node {
@@ -87,7 +87,6 @@ mutation AddComment($clientMutationId: String, $subjectId: ID!, $body: String!){
       }
     }
   }
-  
 `;
 
 export { getIssueComments, ADD_COMMENT };

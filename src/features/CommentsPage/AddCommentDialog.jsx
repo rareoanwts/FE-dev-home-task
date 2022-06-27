@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
@@ -9,6 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { ADD_COMMENT } from './query';
+import Context from './Context';
 
 const useStyles = makeStyles(() => ({
   modalButtonsPanel: {
@@ -24,8 +25,9 @@ const AddCommentDialog = ({ isOpen, onClose, subjectId }) => {
   const [formState, setFormState] = useState({
     body: ''
   });
+  const { refetch } = useContext(Context);
 
-  const [createIssue] = useMutation(ADD_COMMENT, {
+  const [addComment] = useMutation(ADD_COMMENT, {
     variables: {
       subjectId,
       clientMutationId: userId,
@@ -40,7 +42,13 @@ const AddCommentDialog = ({ isOpen, onClose, subjectId }) => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            createIssue();
+            addComment().then(() => {
+              refetch({
+                subjectId,
+                clientMutationId: userId,
+                ...formState
+              });
+            });
             onClose();
           }}
         >

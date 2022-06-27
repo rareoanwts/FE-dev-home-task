@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useMutation } from '@apollo/client';
 import { makeStyles } from '@mui/styles';
@@ -8,6 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { CREATE_ISSUE } from './query';
+import Context from './Context';
 
 const useStyles = makeStyles(() => ({
   modalButtonsPanel: {
@@ -19,6 +20,7 @@ const useStyles = makeStyles(() => ({
 
 const CreateIssueDialog = ({ isOpen, onClose, repositoryId }) => {
   const classes = useStyles();
+  const { refetch } = useContext(Context);
   const [formState, setFormState] = useState({
     title: '',
     body: ''
@@ -38,7 +40,12 @@ const CreateIssueDialog = ({ isOpen, onClose, repositoryId }) => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            createIssue();
+            createIssue().then(() => {
+              refetch({
+                repositoryId,
+                ...formState
+              });
+            });
             onClose();
           }}
         >

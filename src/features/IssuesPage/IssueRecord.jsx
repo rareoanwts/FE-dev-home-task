@@ -29,11 +29,9 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const IssueRecord = ({ id, author, createdAt, number, title, comments, closed }) => {
+const IssueRecord = ({ author, createdAt, number, title, comments, closed }) => {
   const classes = useStyles();
   const commentsCount = comments.totalCount;
-
-  console.log("ID: ", id);
 
   return (
     <div className={classes.issueItem}>
@@ -59,7 +57,6 @@ const IssueRecord = ({ id, author, createdAt, number, title, comments, closed })
 };
 
 IssueRecord.propTypes = {
-  id: PropTypes.string.isRequired,
   author: PropTypes.shape({
     login: PropTypes.string.isRequired
   }),

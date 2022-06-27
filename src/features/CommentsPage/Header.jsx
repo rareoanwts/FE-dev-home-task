@@ -74,7 +74,9 @@ const Header = ({ issueId, closed, title, number, author, createdAt, commentsCou
           </div>
         </div>
       </div>
-      <div role="item" onClick={() => setIsModalOpen(true)} className={classes.addCommentButton}>Add comment</div>
+      <div role="item" onClick={() => setIsModalOpen(true)} className={classes.addCommentButton}>
+        Add comment
+      </div>
       <AddCommentDialog isOpen={isModalOpen} onClose={onClose} subjectId={issueId} />
     </div>
   );

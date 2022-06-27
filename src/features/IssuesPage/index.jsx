@@ -8,6 +8,7 @@ import pick from 'lodash/pick';
 import { getIssuesByRepoName } from './query';
 import Header from './Header';
 import IssueRecord from './IssueRecord';
+import Context from './Context';
 
 const useStyles = makeStyles(() => ({
   wrapper: {
@@ -80,14 +81,16 @@ const IssuesPage = ({ id, closed, open, issues }) => {
 
 const IssuesPageHOC = () => {
   const { userId, repo } = useParams();
-  const { data } = useQuery(getIssuesByRepoName({ userId, repoName: repo }));
+  const { data, refetch } = useQuery(getIssuesByRepoName({ userId, repoName: repo }));
 
   return data ? (
-    <Grid container justifyContent="center">
-      <Grid item xs={8}>
-        <IssuesPage {...data.repository} />
+    <Context.Provider value={{ refetch }}>
+      <Grid container justifyContent="center">
+        <Grid item xs={8}>
+          <IssuesPage {...data.repository} />
+        </Grid>
       </Grid>
-    </Grid>
+    </Context.Provider>
   ) : (
     <></>
   );
