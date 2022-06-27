@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@mui/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faCircleDot } from '@fortawesome/free-solid-svg-icons';
+import AddCommentDialog from './AddCommentDialog';
 
 const useStyles = makeStyles(() => ({
   headerWrapper: {
@@ -32,20 +33,27 @@ const useStyles = makeStyles(() => ({
   bold: {
     fontWeight: 'bold'
   },
-  newIssueButton: {
+  addCommentButton: {
     backgroundColor: '#2da44e',
     borderColor: '#2da44e',
     borderRadius: '5px',
     padding: '5px 10px',
     marginLeft: 'auto',
     color: 'white',
-    fontSize: '12px',
-    alignSelf: 'center'
+    fontSize: '14px',
+    alignSelf: 'center',
+
+    '&:hover': {
+      cursor: 'pointer'
+    }
   }
 }));
 
-const Header = ({ closed, title, number, author, createdAt, commentsCount }) => {
+const Header = ({ issueId, closed, title, number, author, createdAt, commentsCount }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const classes = useStyles();
+
+  const onClose = () => setIsModalOpen(false);
 
   return (
     <div className={classes.headerWrapper}>
@@ -66,12 +74,16 @@ const Header = ({ closed, title, number, author, createdAt, commentsCount }) => 
           </div>
         </div>
       </div>
-      <button className={classes.newIssueButton}>New issue</button>
+      <div role="item" onClick={() => setIsModalOpen(true)} className={classes.addCommentButton}>
+        Add comment
+      </div>
+      <AddCommentDialog isOpen={isModalOpen} onClose={onClose} subjectId={issueId} />
     </div>
   );
 };
 
 Header.propTypes = {
+  issueId: PropTypes.string.isRequired,
   closed: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   number: PropTypes.number.isRequired,

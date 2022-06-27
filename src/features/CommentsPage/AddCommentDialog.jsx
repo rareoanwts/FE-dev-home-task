@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useParams } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { makeStyles } from '@mui/styles';
 import Dialog from '@mui/material/Dialog';
@@ -7,7 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { CREATE_ISSUE } from './query';
+import { ADD_COMMENT } from './query';
 import Context from './Context';
 
 const useStyles = makeStyles(() => ({
@@ -18,50 +19,39 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const CreateIssueDialog = ({ isOpen, onClose, repositoryId }) => {
+const AddCommentDialog = ({ isOpen, onClose, subjectId }) => {
   const classes = useStyles();
-  const { refetch } = useContext(Context);
+  const { userId } = useParams();
   const [formState, setFormState] = useState({
-    title: '',
     body: ''
   });
+  const { refetch } = useContext(Context);
 
-  const [createIssue] = useMutation(CREATE_ISSUE, {
+  const [addComment] = useMutation(ADD_COMMENT, {
     variables: {
-      repositoryId,
+      subjectId,
+      clientMutationId: userId,
       ...formState
     }
   });
 
   return (
     <Dialog open={isOpen} onClose={onClose} fullWidth>
-      <DialogTitle>Create new issue</DialogTitle>
+      <DialogTitle>Leave a comment</DialogTitle>
       <DialogContent>
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            createIssue().then(() => {
+            addComment().then(() => {
               refetch({
-                repositoryId,
+                subjectId,
+                clientMutationId: userId,
                 ...formState
               });
             });
             onClose();
           }}
         >
-          <TextField
-            autoFocus
-            fullWidth
-            variant="outlined"
-            placeholder="Title"
-            style={{ marginBottom: '8px' }}
-            onChange={(e) => {
-              setFormState({
-                ...formState,
-                title: e.target.value
-              });
-            }}
-          />
           <TextField
             fullWidth
             variant="outlined"
@@ -77,7 +67,7 @@ const CreateIssueDialog = ({ isOpen, onClose, repositoryId }) => {
           />
           <div className={classes.modalButtonsPanel}>
             <Button onClick={onClose}>Cancel</Button>
-            <Button type="submit">Create</Button>
+            <Button type="submit">Add comment</Button>
           </div>
         </form>
       </DialogContent>
@@ -85,10 +75,10 @@ const CreateIssueDialog = ({ isOpen, onClose, repositoryId }) => {
   );
 };
 
-CreateIssueDialog.propTypes = {
+AddCommentDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
-  repositoryId: PropTypes.string.isRequired
+  subjectId: PropTypes.string.isRequired
 };
 
-export default CreateIssueDialog;
+export default AddCommentDialog;
