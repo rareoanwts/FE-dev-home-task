@@ -1,19 +1,9 @@
 import { gql } from '@apollo/client';
 
-const getIssuesTotalCount = (userId, repoName) => gql`
-query {
-    repositoryOwner (login: "${userId}") {
-    	repository(name: "${repoName}") {
-            issues {
-                totalCount
-            }
-        }
-    }
-}`;
-
 const getIssuesByRepoName = ({ userId, repoName }) => gql`
 query {
     repository(owner: "${userId}", name: "${repoName}") {
+      id
       open: issues(states:OPEN) {
         totalCount
       }
@@ -55,4 +45,15 @@ query {
   }
 `;
 
-export { getIssuesByRepoName, getIssuesTotalCount };
+const CREATE_ISSUE = gql`
+  mutation CreateIssue($repositoryId: ID!, $title: String!, $body: String!) {
+    createIssue(input: { repositoryId: $repositoryId, title: $title, body: $body }) {
+      issue {
+        number
+        body
+      }
+    }
+  }
+`;
+
+export { getIssuesByRepoName, CREATE_ISSUE };

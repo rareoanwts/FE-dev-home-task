@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { AppBar, Toolbar } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Link } from 'react-router-dom';
@@ -71,10 +72,21 @@ const Navbar = ({ starredRepositories, repositories }) => {
           <Link to="/" className={classes.link}>
             <FontAwesomeIcon icon={faStar} className={classes.icon} />
             Stars
+            <span>{starredRepositories.totalCount}</span>
           </Link>
         </div>
       </Toolbar>
     </AppBar>
   );
 };
+
+Navbar.propTypes = {
+  starredRepositories: PropTypes.shape({
+    totalCount: PropTypes.number.isRequired
+  }),
+  repositories: PropTypes.shape({
+    totalCount: PropTypes.number.isRequired
+  })
+};
+
 export default Navbar;

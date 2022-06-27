@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-const getRepositories = (userId, page) => gql`
+const getRepositories = (userId) => gql`
 query {
     repositoryOwner (login: "${userId}") {
       repositories(first: 30, orderBy: {field: UPDATED_AT, direction: DESC}) {

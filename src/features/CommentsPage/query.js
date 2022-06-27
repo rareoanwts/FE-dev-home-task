@@ -48,6 +48,7 @@ query {
             totalCount
             edges {
             node {
+                id
                 bodyText
                 bodyHTML
                 createdAt
