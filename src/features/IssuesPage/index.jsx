@@ -69,8 +69,8 @@ const IssuesPage = ({ id, closed, open, issues }) => {
       <div className={classes.table}>
         {issues.edges.map(({ node }) => (
           <IssueRecord
-            key={node.number}
-            {...pick(node, ['author', 'createdAt', 'number', 'title', 'comments', 'closed'])}
+            key={node.id}
+            {...pick(node, ['id', 'author', 'createdAt', 'number', 'title', 'comments', 'closed'])}
           />
         ))}
       </div>

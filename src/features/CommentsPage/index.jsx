@@ -8,10 +8,12 @@ import { getIssueComments } from './query';
 import Header from './Header';
 import Comment from './Comment';
 
-const Comments = ({ closed, title, number, createdAt, author, comments }) => {
+const Comments = ({ id, closed, title, number, createdAt, author, comments }) => {
+
   return (
     <>
       <Header
+        issueId={id}
         author={author}
         closed={closed}
         title={title}
@@ -33,6 +35,7 @@ const Comments = ({ closed, title, number, createdAt, author, comments }) => {
 };
 
 Comments.propTypes = {
+  id: PropTypes.string.isRequired,
   closed: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   number: PropTypes.number.isRequired,

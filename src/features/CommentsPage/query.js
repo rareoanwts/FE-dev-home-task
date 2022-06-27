@@ -4,6 +4,7 @@ const getIssueComments = ({ userId, repoName, issueNumber }) => gql`
 query {
     repository(owner: "${userId}", name: "${repoName}") {
       issue(number: ${issueNumber}) {
+        id
         title
         closed
         createdAt
@@ -44,7 +45,7 @@ query {
                 login
             }
         }
-        comments(first: 100) {
+        comments(first: 100, orderBy: {field: UPDATED_AT, direction: DESC}) {
             totalCount
             edges {
             node {
@@ -67,4 +68,26 @@ query {
 }
 `;
 
-export { getIssueComments };
+const ADD_COMMENT = gql`
+mutation AddComment($clientMutationId: String, $subjectId: ID!, $body: String!){
+    addComment(input:{clientMutationId: $clientMutationId, subjectId: $subjectId, body: $body}) {
+      clientMutationId
+      commentEdge {
+        node {
+          body
+          repository {
+            id
+            name
+            nameWithOwner
+          }
+          issue {
+            number
+          }
+        }
+      }
+    }
+  }
+  
+`;
+
+export { getIssueComments, ADD_COMMENT };
