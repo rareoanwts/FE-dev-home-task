@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link, useParams } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookBookmark, faCircle, faCodeBranch, faStar } from '@fortawesome/free-solid-svg-icons';
 
 const useStyles = makeStyles(() => ({
   wrapper: {
-    borderRadius: '10px',
     margin: '12px',
-    border: '1px solid grey',
+    borderTop: '1px solid grey',
     padding: '20px'
   },
   description: {
@@ -33,21 +33,26 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const PinnedRepoItem = ({ name, description, forkCount, stargazerCount, primaryLanguage }) => {
+const RepoItem = ({ name, description, forkCount, stargazerCount, primaryLanguage }) => {
+  const { userId } = useParams();
   const classes = useStyles();
 
   return (
     <div className={classes.wrapper}>
       <div>
         <FontAwesomeIcon icon={faBookBookmark} className={classes.icon} />
-        <span className={classes.repoLink}>{name}</span>
+        <Link to={`/${userId}/${name}/issues`}>
+          <span className={classes.repoLink}>{name}</span>
+        </Link>
       </div>
       <div className={classes.description}>{description}</div>
       <div className={classes.panel}>
-        <span className={classes.panelItem}>
-          <FontAwesomeIcon icon={faCircle} className={classes.icon} />
-          {primaryLanguage.name}
-        </span>
+        {primaryLanguage && (
+          <span className={classes.panelItem}>
+            <FontAwesomeIcon icon={faCircle} className={classes.icon} />
+            {primaryLanguage.name}
+          </span>
+        )}
         <span className={classes.panelItem}>
           <FontAwesomeIcon icon={faStar} />
           {stargazerCount}
@@ -56,23 +61,18 @@ const PinnedRepoItem = ({ name, description, forkCount, stargazerCount, primaryL
           <FontAwesomeIcon icon={faCodeBranch} />
           {forkCount}
         </span>
+        <span className={classes.panelItem}>last updated at</span>
       </div>
     </div>
   );
 };
 
-PinnedRepoItem.propTypes = {
+RepoItem.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  forkCount: PropTypes.number,
-  stargazerCount: PropTypes.number,
-  primaryLanguage: PropTypes.string
+  forkCount: PropTypes.number.isRequired,
+  stargazerCount: PropTypes.number.isRequired,
+  primaryLanguage: PropTypes.string.isRequired
 };
 
-PinnedRepoItem.defaultProps = {
-  forkCount: 0,
-  stargazerCount: 0,
-  primaryLanguage: ''
-};
-
-export default PinnedRepoItem;
+export default RepoItem;
