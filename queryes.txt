@@ -1,0 +1,25 @@
+query {
+    repositoryOwner(login: "gaearon") {
+      login
+      ... on User {
+        id,
+        bio,
+        name,
+        avatarUrl,
+        followers {
+          totalCount
+        },
+        following(first: 1) {
+          totalCount
+          edges {
+            node {
+              id
+            }
+          }
+        },
+        email,
+        twitterUsername,
+        
+      }
+    }
+  }
