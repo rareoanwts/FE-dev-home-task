@@ -44,10 +44,12 @@ const PinnedRepoItem = ({ name, description, forkCount, stargazerCount, primaryL
       </div>
       <div className={classes.description}>{description}</div>
       <div className={classes.panel}>
-        <span className={classes.panelItem}>
-          <FontAwesomeIcon icon={faCircle} className={classes.icon} />
-          {primaryLanguage.name}
-        </span>
+        {primaryLanguage && (
+          <span className={classes.panelItem}>
+            <FontAwesomeIcon icon={faCircle} className={classes.icon} />
+            {primaryLanguage.name}
+          </span>
+        )}
         <span className={classes.panelItem}>
           <FontAwesomeIcon icon={faStar} />
           {stargazerCount}
@@ -66,13 +68,15 @@ PinnedRepoItem.propTypes = {
   description: PropTypes.string.isRequired,
   forkCount: PropTypes.number,
   stargazerCount: PropTypes.number,
-  primaryLanguage: PropTypes.string
+  primaryLanguage: PropTypes.shape({
+    name: PropTypes.string
+  })
 };
 
 PinnedRepoItem.defaultProps = {
   forkCount: 0,
   stargazerCount: 0,
-  primaryLanguage: ''
+  primaryLanguage: {}
 };
 
 export default PinnedRepoItem;

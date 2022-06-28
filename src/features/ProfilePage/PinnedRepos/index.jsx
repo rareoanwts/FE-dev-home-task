@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import PinnedRepoItem from './PinnedRepoItem';
 import Grid from '@mui/material/Grid';
 
-const PinnedRepos = ({ pinnedItems }) => {
-  const itemToRender = pinnedItems.edges;
+const PinnedRepos = ({ pinnedItems, repositories }) => {
+  const itemToRender = pinnedItems.edges.length > 0 ? pinnedItems.edges : repositories.edges;
 
   return (
     <Grid container>
       {itemToRender.length > 0 ? (
         itemToRender.map((item) => (
-          <Grid item xs={6} key={item.name}>
+          <Grid item xs={6} key={item.node.name}>
             <PinnedRepoItem {...item.node} />
           </Grid>
         ))
@@ -25,6 +25,9 @@ const PinnedRepos = ({ pinnedItems }) => {
 
 PinnedRepos.propTypes = {
   pinnedItems: PropTypes.shape({
+    edges: PropTypes.array.isRequired
+  }),
+  repositories: PropTypes.shape({
     edges: PropTypes.array.isRequired
   })
 };

@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserGroup, faEnvelope, faDove } from '@fortawesome/free-solid-svg-icons';
 import { makeStyles } from '@mui/styles';
 import Button from '@mui/material/Button';
+import { getUserProfile } from './query';
 
 const useStyles = makeStyles(() => ({
   icon: {
@@ -47,16 +50,20 @@ const UserInfo = ({ avatarUrl, name, login, following, followers, email, twitter
       <div className={classes.itemBlock}>
         <FontAwesomeIcon icon={faUserGroup} className={classes.icon} />
         {`${followers.totalCount} followers`}
-        {`${following.totalCount} following`}
+        {` ${following.totalCount} following`}
       </div>
-      <div className={classes.itemBlock}>
-        <FontAwesomeIcon icon={faEnvelope} className={classes.icon} />
-        {email}
-      </div>
-      <div className={classes.itemBlock}>
-        <FontAwesomeIcon icon={faDove} className={classes.icon} />
-        {twitterUsername}
-      </div>
+      {email && (
+        <div className={classes.itemBlock}>
+          <FontAwesomeIcon icon={faEnvelope} className={classes.icon} />
+          {email}
+        </div>
+      )}
+      {twitterUsername && (
+        <div className={classes.itemBlock}>
+          <FontAwesomeIcon icon={faDove} className={classes.icon} />
+          {twitterUsername}
+        </div>
+      )}
     </>
   );
 };
@@ -81,4 +88,11 @@ UserInfo.defaultProps = {
   twitterUsername: ''
 };
 
-export default UserInfo;
+const UserInfoHOC = () => {
+  const { userId } = useParams();
+  const { data } = useQuery(getUserProfile(userId));
+
+  return data ? <UserInfo {...data.user} /> : <></>;
+};
+
+export default UserInfoHOC;
