@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
+import Grid from '@mui/material/Grid';
+import UserProfile from 'features/ProfilePage/UserInfo';
 
 import { getRepositories } from './query';
 import RepoItem from './RepoItem';
@@ -28,7 +30,18 @@ const RepositoriesHOC = () => {
   const { userId } = useParams();
   const { data } = useQuery(getRepositories(userId));
 
-  return data ? <ReposPage {...data.repositoryOwner} /> : <></>;
+  return data ? (
+    <Grid container justifyContent="center">
+      <Grid item xs={3}>
+        <UserProfile />
+      </Grid>
+      <Grid item xs={6}>
+        <ReposPage {...data.repositoryOwner} />
+      </Grid>
+    </Grid>
+  ) : (
+    <></>
+  );
 };
 
 export default RepositoriesHOC;

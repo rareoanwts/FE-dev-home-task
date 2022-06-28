@@ -69,10 +69,17 @@ const RepoItem = ({ name, description, forkCount, stargazerCount, primaryLanguag
 
 RepoItem.propTypes = {
   name: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  description: PropTypes.string,
   forkCount: PropTypes.number.isRequired,
   stargazerCount: PropTypes.number.isRequired,
-  primaryLanguage: PropTypes.string.isRequired
+  primaryLanguage: PropTypes.shape({
+    name: PropTypes.string
+  })
+};
+
+RepoItem.defaultProps = {
+  primaryLanguage: {},
+  description: ''
 };
 
 export default RepoItem;
